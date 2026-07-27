@@ -1,4 +1,7 @@
+from pprint import pprint
+
 markbook = {}
+final_grades = {}
 
 def add_records(markbook):
     add_student = True
@@ -10,7 +13,7 @@ def add_records(markbook):
         if name:
             add_student = False
         else:
-            print("Name cannot be empty: ")
+            print("\nName cannot be empty\n")
 
     #Allows the user to input a student's score again if they accidentally make it empty or less than zero or more than 100
     while add_score == True:
@@ -19,23 +22,43 @@ def add_records(markbook):
             if score:
                 match score:
                     case int() if score >= 0 and score <= 100:
-                        markbook.update(Student=name, Score=score)
+                        markbook[name] = score
                         add_score = False
                     case _:
-                        print("The score cannot be less than zero and more than 100")
+                        print("The score cannot be less than zero and more than 100\n")
                         
             else:
-                print("Score needs to be a whole number!")
+                print("\nScore needs to be a whole number!\n")
         except ValueError:
-            print("Score needs to be a whole number")
-    print(markbook)
+            print("\nScore needs to be a whole number\n")
+    
+    return
+    
 
 
 def average(markbook):
-    return sum(list(markbook.values())) / len(list(markbook.values()))
+    return f"The average grade is: {sum(list(markbook.values())) / len(list(markbook.values()))}"
 
 
+def lowest(markbook):
+    #returns the key with the lowest int value with whatever dictionary is paseed in this funciton
+    return f"The lowest grade is: {min(list(markbook.values()))} which belongs to: {list(markbook.items())[list(markbook.values()).index(min(list(markbook.values())))]}"
 
 def main():
-    add_records(markbook)
-    average(markbook)
+    adding_records = True
+    #Gives the user the opportunity to add records and stop whenever they need to
+    while adding_records:
+        ask = input("Do you want to add records or stop?\n[add / stop]: ")
+        match ask:
+            case 'add':
+                add_records(markbook)
+            case 'stop':
+                for x, y in markbook.items():
+                    print(f"{x}: {y}")
+                adding_records = False
+            case _:
+                print("\nInput either add or stop [1]\n")
+    print(average(markbook))
+    print(lowest(markbook))
+
+main()
