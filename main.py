@@ -41,10 +41,17 @@ def average(markbook):
 
 
 def lowest(markbook):
+    lowest_score = 100
+    lowest_scored_students = []
+    for student, score in markbook.items():
+        if score <= lowest_score:
+            lowest_scored_students += student
+            lowest_score = score
+        
+    print(lowest_scored_students)
     #returns a string that says what the lowest grade is and who it belongs to
-    if
+    return f"The lowest grade is: {min(list(markbook.values()))} which belongs to: {list(markbook.items())[list(markbook.values()).index(min(list(markbook.values())))][0]}"
 
-	return f"The lowest grade is: {min(list(markbook.values()))} which belongs to: {list(markbook.items())[list(markbook.values()).index(min(list(markbook.values())))][0]}"
 
 def highest(markbook):
 	#returns a string that says what the highest grade is and who it belongs to
@@ -53,21 +60,21 @@ def highest(markbook):
 
 def main():
 	adding_records = True
-	#Gives the user the opportunity to add records and stop whenever they need to
-	while adding_records:
-		ask = input("Do you want to add records or stop?\n[add / stop]: ")
-		match ask:
-			case 'add':
-				add_records(markbook)
-			case 'stop':
-				if not markbook:
-					print("\nThere is nothing in the markbook\n")
-					return
-				for x, y in markbook.items():
-					print(f"{x}: {y}")
-				adding_records = False
-			case _:
-				print("\nInput either add or stop [1]\n")
+    #Gives the user the opportunity to add records and stop whenever they need to
+    while adding_records:
+	    ask = input("Do you want to add records or stop?\n[add / stop]: ")
+	    match ask:
+		    case 'add':
+			    add_records(markbook)   
+            case 'stop':
+                if not markbook:
+                    print("\nThere is nothing in the markbook\n")
+                    return
+                for name, score in markbook.items():
+                    print(f"{name}: {score}")
+                    adding_records = False
+            case _:
+                print("\nInput either add or stop [1]\n")
 	print(average(markbook))
 	print(lowest(markbook))
 	print(highest(markbook))
