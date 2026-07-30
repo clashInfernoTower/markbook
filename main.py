@@ -1,5 +1,3 @@
-from pprint import pprint
-
 markbook = {}
 final_grades = {}
 
@@ -39,43 +37,71 @@ def add_records(markbook):
 def average(markbook):
     return f"The average grade is: {sum(list(markbook.values())) / len(list(markbook.values()))}"
 
-
 def lowest(markbook):
-    lowest_score = 100
     lowest_scored_students = []
-    for student, score in markbook.items():
-        if score <= lowest_score:
-            lowest_scored_students += student
-            lowest_score = score
-        
-    print(lowest_scored_students)
-    #returns a string that says what the lowest grade is and who it belongs to
-    return f"The lowest grade is: {min(list(markbook.values()))} which belongs to: {list(markbook.items())[list(markbook.values()).index(min(list(markbook.values())))][0]}"
+    students = list(markbook.items())
+    students.sort(key=lambda score: score[1])
+    
+    for student, score in students:
+        if score == students[0][1]:
+            lowest_scored_students.append(student)
+    
+    #Makes the lowest scored_students nicer to read
+    simplified_lowest_scored_students = ", ".join(student for student in lowest_scored_students)
+    #returns a string that says what the lowest grade is and who it belongs to, multiple people can have the same lowest score which the code above in this function allows
+    return f"The lowest grade is: {students[0][1]} which belongs to: {simplified_lowest_scored_students}"
 
 
 def highest(markbook):
-	#returns a string that says what the highest grade is and who it belongs to
-	return f"The highest grade is: {max(list(markbook.values()))} which belongs to: {list(markbook.items())[list(markbook.values()).index(max(list(markbook.values())))][0]}"
+    highest_scored_students = []
+    students = list(markbook.items())
+    students.sort(key=lambda score: score[1], reverse=True)
+    
+    for student, score in students:
+        if score == students[0][1]:
+            highest_scored_students.append(student)
 
+    #Makes the highest_scored_students nicer to read
+    simplified_highest_scored_students = ", ".join(student for student in highest_scored_students)
+    #returns a string that says what the highest grade is and who it belongs to, multiple people can have the same highest score which the code above in this function allows
+    return f"The highest grade is: {students[0][1]} which belongs to: {simplified_highest_scored_students}"
+
+def grade(markbook):
+    for student, score in list(markbook.items()):
+        match score:
+            case score if score >= 90:
+                final_grades[student] = 'E'
+            case score if score >= 70:
+                final_grades[student] = 'M'
+            case score if score >= 50:
+                final_grades[student] = 'A'
+            case _:
+                final_grades[student] = 'NA'
+    
+    formatted_final_grade = ""
+    for student, grade in list(final_grades.items()):
+        formatted_final_grade += f"--{student} : {grade}\n"
+    return f"The final grades are:\n\n{formatted_final_grade}"
 
 def main():
-	adding_records = True
+    adding_records = True
     #Gives the user the opportunity to add records and stop whenever they need to
     while adding_records:
-	    ask = input("Do you want to add records or stop?\n[add / stop]: ")
-	    match ask:
-		    case 'add':
-			    add_records(markbook)   
+        ask = input("Do you want to add records or stop?\n[add / stop]: ")
+        match ask:
+            case 'add':
+                add_records(markbook)   
             case 'stop':
                 if not markbook:
                     print("\nThere is nothing in the markbook\n")
                     return
                 for name, score in markbook.items():
                     print(f"{name}: {score}")
-                    adding_records = False
+                adding_records = False
             case _:
                 print("\nInput either add or stop [1]\n")
-	print(average(markbook))
-	print(lowest(markbook))
-	print(highest(markbook))
+    print(average(markbook))
+    print(lowest(markbook))
+    print(highest(markbook))
+    print(grade(markbook))
 main()
